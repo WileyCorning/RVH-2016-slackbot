@@ -3,7 +3,7 @@ var bodyParser = require("body-parser");
 var app = express();
 var WebClient = require('@slack/client').WebClient;
 
-var SLACK_TOKEN = '';
+var SLACK_TOKEN = 'xoxp-86728851488-866786 97043-86839731591-c498919d1db03b27cd083acc30b5f81a';
 var HACKQ_URL = 'example.com';
 var TEAM_CHANNEL_PREFIX = 'team-';
 var MENTOR_GROUP_NAME = 'mentors';
@@ -45,7 +45,7 @@ app.post('/hackq-notify',function(req,res) {
   var topic = req.body.topic;
   var s = "A new ticket was just created on "+HACKQ_URL + topic ? ":\n\t"+topic : ".";
   webClient.chat.postMessage(MENTOR_GROUP_NAME,s,function(err,res){});
-}
+});
 
 app.listen(5789);
 
