@@ -9,7 +9,7 @@ var SLACK_TOKEN = '';
 var HACKQ_URL = 'rvhackathon.media.mit.edu';
 var TEAM_CHANNEL_PREFIX = 'team-';
 var MENTOR_GROUP_NAME = 'mentors';
-var webClient = new WebClient(SLACK_TOKEN);
+var webClient;
 
 app.use(bodyParser.urlencoded({extended:true}));
 
@@ -54,6 +54,7 @@ try {
     if(err) throw err;
     console.log(data);
     SLACK_TOKEN = data;
+    WebClient = new WebClient(SLACK_TOKEN);
   });
 }
 catch(err) {
