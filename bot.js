@@ -59,7 +59,7 @@ app.get('/oauth',function(req,res){
     return;
   }
   var opts = {
-    host: "https://slack.com",
+    host: "slack.com",
     path: "/api/oauth.access?"+"client_id="+OAUTH_CLIENT_ID+"&client_secret="+OAUTH_CLIENT_SECRET+"&code="+code
   };
 
