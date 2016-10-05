@@ -52,9 +52,9 @@ app.post('/hackq-notify',function(req,res) {
 try {
   fs.readFile('../token.txt','utf8',function(err,data){
     if(err) throw err;
-    console.log(data);
     SLACK_TOKEN = data;
     webClient = new WebClient(SLACK_TOKEN);
+    console.log(webClient._token);
   });
 }
 catch(err) {
