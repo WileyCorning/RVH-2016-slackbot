@@ -1,10 +1,11 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var app = express();
+var http = require('http');
 var WebClient = require('@slack/client').WebClient;
 
-var SLACK_TOKEN = 'xoxp-86728851488-866786 97043-86839731591-c498919d1db03b27cd083acc30b5f81a';
-var HACKQ_URL = 'example.com';
+var SLACK_TOKEN = '';
+var HACKQ_URL = 'rvhackathon.media.mit.edu';
 var TEAM_CHANNEL_PREFIX = 'team-';
 var MENTOR_GROUP_NAME = 'mentors';
 var webClient = new WebClient(SLACK_TOKEN);
@@ -40,6 +41,18 @@ app.post('/slackbot',function(req,res) {
       .catch(handleError);
   }
 });
+
+app.get('/oauth',function(req,res){
+  var code = req.query.code;
+  if(!code) {
+    res.send('No code');
+    return;
+  }
+  var url = "https://slack.com/api/oauth.access?"+"client_id="+OAUTH_CLIENT_ID+"&client_secret="+OAUTH_CLIENT_SECRET+"&code="code;
+  http.get(url,function(authResponse){
+    console.log(authResponse);
+  })
+})
 
 app.post('/hackq-notify',function(req,res) {
   var topic = req.body.topic;
