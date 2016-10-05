@@ -52,6 +52,7 @@ app.post('/slackbot',function(req,res) {
 });
 
 app.get('/oauth',function(req,res){
+  console.log(req.query);
   var code = req.query.code;
   if(!code) {
     res.send('No code');
