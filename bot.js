@@ -2,13 +2,22 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var app = express();
 var http = require('http');
+var fs = require('fs');
 var WebClient = require('@slack/client').WebClient;
 
+var OAUTH_CLIENT_ID = '87743516672.87793061877';
+var OAUTH_CLIENT_SECRET = '';
 var SLACK_TOKEN = '';
 var HACKQ_URL = 'rvhackathon.media.mit.edu';
 var TEAM_CHANNEL_PREFIX = 'team-';
 var MENTOR_GROUP_NAME = 'mentors';
 var webClient = new WebClient(SLACK_TOKEN);
+
+fs.readFile('../client-secret.txt','utf8',function(err,data){
+  if(err) throw err;
+  console.log(data);
+  OAUTH_CLIENT_SECRET = data;
+});
 
 app.use(bodyParser.urlencoded({extended:true}));
 
