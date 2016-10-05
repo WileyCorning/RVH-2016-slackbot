@@ -48,7 +48,7 @@ app.get('/oauth',function(req,res){
     res.send('No code');
     return;
   }
-  var url = "https://slack.com/api/oauth.access?"+"client_id="+OAUTH_CLIENT_ID+"&client_secret="+OAUTH_CLIENT_SECRET+"&code="code;
+  var url = "https://slack.com/api/oauth.access?"+"client_id="+OAUTH_CLIENT_ID+"&client_secret="+OAUTH_CLIENT_SECRET+"&code="+code;
   http.get(url,function(authResponse){
     console.log(authResponse);
   })
