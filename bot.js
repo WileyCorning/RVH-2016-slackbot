@@ -54,7 +54,7 @@ try {
     if(err) throw err;
     console.log(data);
     SLACK_TOKEN = data;
-    WebClient = new WebClient(SLACK_TOKEN);
+    webClient = new WebClient(SLACK_TOKEN);
   });
 }
 catch(err) {
