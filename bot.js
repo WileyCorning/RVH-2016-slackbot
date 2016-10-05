@@ -60,11 +60,15 @@ app.get('/oauth',function(req,res){
   }
   var url = "https://slack.com/api/oauth.access?"+"client_id="+OAUTH_CLIENT_ID+"&client_secret="+OAUTH_CLIENT_SECRET+"&code="+code;
   https.get(url,function(authResponse){
-    console.log(authResponse);
-    res.send(authResponse);
-    return;
+    var s = '';
+    authResponse.on('data',function(data){
+      s += data;
+    });
+    authResponse.on('end',function() {
+      console.log(s);
+      res.send(s);
+    });
   });
-  res.send("Unknown");
 })
 
 app.post('/hackq-notify',function(req,res) {
