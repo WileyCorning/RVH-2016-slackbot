@@ -58,8 +58,13 @@ app.get('/oauth',function(req,res){
     res.send('No code');
     return;
   }
-  var url = "https://slack.com/api/oauth.access?"+"client_id="+OAUTH_CLIENT_ID+"&client_secret="+OAUTH_CLIENT_SECRET+"&code="+code;
-  https.get(url,function(authResponse){
+  var opts = {
+    host: "https://slack.com",
+    path: "/api/oauth.access?"+"client_id="+OAUTH_CLIENT_ID+"&client_secret="+OAUTH_CLIENT_SECRET+"&code="+code
+  };
+
+  console.log(opts);
+  https.get(opts,function(authResponse){
     var s = '';
     authResponse.on('data',function(data){
       s += data;
