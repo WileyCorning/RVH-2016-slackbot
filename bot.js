@@ -1,7 +1,7 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var app = express();
-var http = require('http');
+var https = require('https');
 var fs = require('fs');
 var WebClient = require('@slack/client').WebClient;
 
@@ -59,7 +59,7 @@ app.get('/oauth',function(req,res){
     return;
   }
   var url = "https://slack.com/api/oauth.access?"+"client_id="+OAUTH_CLIENT_ID+"&client_secret="+OAUTH_CLIENT_SECRET+"&code="+code;
-  http.get(url,function(authResponse){
+  https.get(url,function(authResponse){
     console.log(authResponse);
     res.send(authResponse);
     return;
