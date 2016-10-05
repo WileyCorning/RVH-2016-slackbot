@@ -5,19 +5,11 @@ var https = require('https');
 var fs = require('fs');
 var WebClient = require('@slack/client').WebClient;
 
-var OAUTH_CLIENT_ID = '87743516672.87793061877';
-var OAUTH_CLIENT_SECRET = '';
 var SLACK_TOKEN = '';
 var HACKQ_URL = 'rvhackathon.media.mit.edu';
 var TEAM_CHANNEL_PREFIX = 'team-';
 var MENTOR_GROUP_NAME = 'mentors';
 var webClient = new WebClient(SLACK_TOKEN);
-
-fs.readFile('../client-secret.txt','utf8',function(err,data){
-  if(err) throw err;
-  console.log(data);
-  OAUTH_CLIENT_SECRET = data;
-});
 
 app.use(bodyParser.urlencoded({extended:true}));
 
@@ -51,36 +43,58 @@ app.post('/slackbot',function(req,res) {
   }
 });
 
-app.get('/oauth',function(req,res){
-  console.log(req.query);
-  var code = req.query.code;
-  if(!code) {
-    res.send('No code');
-    return;
-  }
-  var opts = {
-    host: "slack.com",
-    path: "/api/oauth.access?"+"client_id="+OAUTH_CLIENT_ID+"&client_secret="+OAUTH_CLIENT_SECRET+"&code="+code
-  };
-
-  console.log(opts);
-  https.get(opts,function(authResponse){
-    var s = '';
-    authResponse.on('data',function(data){
-      s += data;
-    });
-    authResponse.on('end',function() {
-      console.log(s);
-      res.send(s);
-    });
-  });
-})
-
 app.post('/hackq-notify',function(req,res) {
   var topic = req.body.topic;
   var s = "A new ticket was just created on "+HACKQ_URL + topic ? ":\n\t"+topic : ".";
   webClient.chat.postMessage(MENTOR_GROUP_NAME,s,function(err,res){});
 });
+
+try {
+  fs.readFile('../token.txt','utf8',function(err,data){
+    if(err) throw err;
+    console.log(data);
+    SLACK_TOKEN = data;
+  });
+}
+catch(err) {
+  console.log(err);
+
+  var OAUTH_CLIENT_ID = '87743516672.87793061877';
+  var OAUTH_CLIENT_SECRET = '';
+
+  fs.readFile('../client-secret.txt','utf8',function(err,data){
+    if(err) throw err;
+    console.log(data);
+    OAUTH_CLIENT_SECRET = data;
+  });
+
+  app.get('/oauth',function(req,res){
+    console.log(req.query);
+    var code = req.query.code;
+    if(!code) {
+      res.send('No code');
+      return;
+    }
+
+    var opts = {
+      host: "slack.com",
+      path: "/api/oauth.access?"+"client_id="+OAUTH_CLIENT_ID+"&client_secret="+OAUTH_CLIENT_SECRET+"&code="+code
+    };
+
+    console.log(opts);
+    https.get(opts,function(authResponse){
+      var s = '';
+      authResponse.on('data',function(data){
+        s += data;
+      });
+      authResponse.on('end',function() {
+        console.log(s);
+        res.send(s);
+      });
+    });
+  })
+}
+
 
 app.listen(5789);
 
